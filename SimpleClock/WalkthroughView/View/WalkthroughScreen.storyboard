@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--WalkthroughScreen-->
+        <scene sceneID="cqx-kR-c1Q">
+            <objects>
+                <pageViewController storyboardIdentifier="WalkThroughPageViewController" autoresizesArchivedViewToFullSize="NO" title="WalkthroughScreen" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="xHd-ev-kCN" customClass="WalkThroughPageViewController" customModule="SimpleClock" customModuleProvider="target" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XOv-SU-W04" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="173" y="99"/>
+        </scene>
+        <!--ContentScreen-->
+        <scene sceneID="Ioc-p3-wdV">
+            <objects>
+                <viewController storyboardIdentifier="ContentViewController" title="ContentScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="tXa-wa-dbB" customClass="ContentViewController" customModule="SimpleClock" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="rwi-VH-vCm">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hMF-FN-4pc">
+                                <rect key="frame" x="87" y="149" width="240" height="240"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="b2Q-cQ-ha5"/>
+                                    <constraint firstAttribute="height" constant="240" id="ly9-uS-2Xs"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yl7-tq-Oa6">
+                                <rect key="frame" x="20" y="429" width="374" height="26"/>
+                                <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tcL-12-bGx">
+                                <rect key="frame" x="40" y="467" width="334" height="23.5"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="18"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="IV4-e7-2y5">
+                                <rect key="frame" x="145.5" y="837" width="123" height="28"/>
+                                <color key="pageIndicatorTintColor" systemColor="opaqueSeparatorColor"/>
+                                <color key="currentPageIndicatorTintColor" systemColor="systemPinkColor"/>
+                            </pageControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aiu-mw-Vzj">
+                                <rect key="frame" x="120" y="785" width="174" height="32"/>
+                                <color key="backgroundColor" systemColor="labelColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="174" id="hha-lR-kCd"/>
+                                    <constraint firstAttribute="height" constant="32" id="pkT-Fn-hBk"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="skipButtonTapped:" destination="tXa-wa-dbB" eventType="touchUpInside" id="hVK-4u-7qy"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="a3e-Gj-Ok3"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="a3e-Gj-Ok3" firstAttribute="trailing" secondItem="yl7-tq-Oa6" secondAttribute="trailing" constant="20" id="0k6-t3-VOn"/>
+                            <constraint firstItem="hMF-FN-4pc" firstAttribute="centerX" secondItem="rwi-VH-vCm" secondAttribute="centerX" id="6Kg-ny-cDt"/>
+                            <constraint firstItem="Aiu-mw-Vzj" firstAttribute="leading" secondItem="a3e-Gj-Ok3" secondAttribute="leading" constant="120" id="8Fl-5e-0ae"/>
+                            <constraint firstItem="Aiu-mw-Vzj" firstAttribute="top" relation="greaterThanOrEqual" secondItem="tcL-12-bGx" secondAttribute="bottom" constant="20" id="BTJ-IJ-4pU"/>
+                            <constraint firstItem="yl7-tq-Oa6" firstAttribute="leading" secondItem="a3e-Gj-Ok3" secondAttribute="leading" constant="20" id="Bsd-og-5H5"/>
+                            <constraint firstItem="tcL-12-bGx" firstAttribute="leading" secondItem="a3e-Gj-Ok3" secondAttribute="leading" constant="40" id="GfV-sI-97a"/>
+                            <constraint firstItem="a3e-Gj-Ok3" firstAttribute="trailing" secondItem="tcL-12-bGx" secondAttribute="trailing" constant="40" id="NU3-a3-hS7"/>
+                            <constraint firstItem="tcL-12-bGx" firstAttribute="top" secondItem="yl7-tq-Oa6" secondAttribute="bottom" constant="12" id="Sds-0z-GXd"/>
+                            <constraint firstAttribute="bottom" secondItem="IV4-e7-2y5" secondAttribute="bottom" constant="31" id="b75-3O-3BZ"/>
+                            <constraint firstItem="hMF-FN-4pc" firstAttribute="centerY" secondItem="rwi-VH-vCm" secondAttribute="centerY" multiplier="0.6" identifier="middleHorizontalImageViewContraint" id="cU9-fG-5rT"/>
+                            <constraint firstItem="a3e-Gj-Ok3" firstAttribute="trailing" secondItem="Aiu-mw-Vzj" secondAttribute="trailing" constant="120" id="emd-aR-vPb"/>
+                            <constraint firstItem="IV4-e7-2y5" firstAttribute="centerX" secondItem="rwi-VH-vCm" secondAttribute="centerX" id="jfH-UP-J3h"/>
+                            <constraint firstItem="IV4-e7-2y5" firstAttribute="top" secondItem="Aiu-mw-Vzj" secondAttribute="bottom" priority="997" constant="20" id="oIR-ed-ItQ"/>
+                            <constraint firstItem="yl7-tq-Oa6" firstAttribute="top" secondItem="hMF-FN-4pc" secondAttribute="bottom" constant="40" id="tLN-vT-T5r"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="comentLabel" destination="tcL-12-bGx" id="bDl-V3-HEj"/>
+                        <outlet property="contentImageView" destination="hMF-FN-4pc" id="2WZ-63-TCt"/>
+                        <outlet property="greetingsLabel" destination="yl7-tq-Oa6" id="Ct0-Q5-b0e"/>
+                        <outlet property="pageControl" destination="IV4-e7-2y5" id="Xbv-yE-Xw0"/>
+                        <outlet property="skipButton" destination="Aiu-mw-Vzj" id="cRe-Z3-Nqy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0Sh-Zb-Xc9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="960" y="102"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemPinkColor">
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

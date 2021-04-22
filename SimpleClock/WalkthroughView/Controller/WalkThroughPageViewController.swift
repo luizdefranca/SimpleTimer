@@ -39,13 +39,13 @@ class WalkThroughPageViewController: UIPageViewController {
     //MARK: - Functions
 
     private func contentViewController(at index: Int) -> ContentViewController? {
-        if index < 0 || index > pageGreetings.count {
+        if index < 0 || index >= pageGreetings.count {
             return nil
         }
 
         let storyBoard = UIStoryboard(name: "WalkthroughScreen", bundle: nil)
         guard let pageContentViewController  =
-            storyboard?.instantiateViewController(identifier: "ContentViewController")
+            storyBoard.instantiateViewController(identifier: "ContentViewController")
             as? ContentViewController else {
             return nil
         }
@@ -66,6 +66,7 @@ class WalkThroughPageViewController: UIPageViewController {
 }
 
 //MARK: - Extensions
+//MARK: UIPageViewControllerDataSource
 extension WalkThroughPageViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         var index = (viewController as! ContentViewController).index

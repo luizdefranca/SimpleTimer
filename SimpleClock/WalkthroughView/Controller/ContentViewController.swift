@@ -27,7 +27,9 @@ class ContentViewController: UIViewController {
     //MARK: - LifeCycle Functions
     override func viewDidLoad() {
         skipButton.layer.cornerRadius = 5
-
+        setupView()
+        pageControl.currentPage = index
+        setupButton()
     }
 
 
@@ -35,6 +37,7 @@ class ContentViewController: UIViewController {
     //MARK: - Actions
 
     @IBAction func skipButtonTapped(_ sender: UIButton) {
+        UserDefaults.standard.set(true, forKey: "hasViewedWalkthrough")
         dismiss(animated: true, completion: nil)
     }
 
@@ -46,7 +49,7 @@ class ContentViewController: UIViewController {
     }
 
     private func setupButton() {
-        skipButton.layer.cornerRadius = 5
+        skipButton.layer.cornerRadius = 7
         switch index {
             case 0...1:
                 skipButton.setTitle("Skip", for: .normal)
