@@ -7,9 +7,14 @@
 
 import UIKit
 import UserNotifications
+import AVFoundation
 
+protocol TimerViewControllerDelegate : AnyObject{
+    func stopTimer()
+}
 
 class TimerViewController: UIViewController {
+
 
     //MARK: - Outlets
     @IBOutlet weak var clockImageView: UIImageView!
@@ -24,7 +29,10 @@ class TimerViewController: UIViewController {
     var timer = Timer()
     var seconds = 0
     var publisher : Timer.TimerPublisher?
-    let center = UNUserNotificationCenter.current()
+    let notificationManager = NotificationManager.shared
+    var bgTask : UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+    var alarmSound: AVAudioPlayer?
+    let queue = DispatchQueue.global(qos: .background)
 
     //MARK: - Lifecycle Methods
     override func viewDidLoad() {
@@ -32,7 +40,9 @@ class TimerViewController: UIViewController {
         timePickerView.delegate = self
         timePickerView.dataSource = self
 
+        NotificationCenter.default.addObserver(self, selector: #selector(goesBackground), name: UIApplication.willResignActiveNotification, object: nil)
     }
+
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -45,7 +55,8 @@ class TimerViewController: UIViewController {
     //MARK: - Actions
     @IBAction func actionButton(_ sender: UIButton) {
 
-        askPermission()
+        notificationManager.askPermission()
+
         if isTimerRunning {
             stopTimer()
         } else {
@@ -53,8 +64,42 @@ class TimerViewController: UIViewController {
         }
     }
 
+
+    func test() {
+       let t = NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
+    }
+
     //MARK: - Functions
+    func sendNot(){
+//        let not = Notification(name: UIApplication.willResignActiveNotification)
+//        NotificationCenter.default.addObserver(self, selector: #selector(goesBackground), name: UIApplication.willResignActiveNotification, object: nil)
+//        createNotifications.sendNotification(isBreak: isBreak)
+//        addRoundAndChangeTime()
+//        UIApplication.shared.endBackgroundTask(bgTask)
+
+    }
+
+    @objc func goesBackground() {
+        print("Goes Background")
+    }
+
+    func statePhone(){
+            let state = UIApplication.shared.applicationState
+            if state == .active {
+               print("I'm active")
+            }
+            else if state == .inactive {
+               print("I'm inactive")
+            }
+            else if state == .background {
+               print("I'm in background")
+               bgTask = UIApplication.shared.beginBackgroundTask(expirationHandler: { UIApplication.shared.endBackgroundTask(self.bgTask) })
+            }
+    }
+    
     func startTimer(){
+        notificationManager.scheduleNotification(id: 1, timeInterval: Double(selectedTimeValue), title: "Alarm", body: "The time is over! :)")
+
         self.timePickerView.isHidden = true
         self.timeLabel.text = selectedTimeValue.description
         self.timeLabel.isHidden = false
@@ -62,10 +107,17 @@ class TimerViewController: UIViewController {
         isTimerRunning = !isTimerRunning
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(updateTimer)), userInfo: nil, repeats: true)
         timer.tolerance = 0
-        RunLoop.current.add(timer, forMode: .common)
+
+
+        queue.async {
+            RunLoop.current.add(self.timer, forMode: .default)
+        }
+
+
     }
 
     func stopTimer(){
+        notificationManager.cancelNotification()
         seconds = 0
         isTimerRunning = !isTimerRunning
         timer.invalidate()
@@ -76,15 +128,27 @@ class TimerViewController: UIViewController {
     }
 
     @objc func updateTimer() {
-        if seconds < selectedTimeValue {
-            seconds += 1
-            print(seconds)
+
+        
+        DispatchQueue.main.async {
+
+
+        if self.seconds < self.selectedTimeValue {
+            self.seconds += 1
+            print(self.seconds)
             self.timeLabel.text = "\((self.selectedTimeValue - self.seconds ))"
         } else {
             print("time is over")
-            stopTimer()
+            self.playAlarm()
+            self.stopTimer()
         }
 
+        }
+    }
+
+    private func playAlarm(){
+        shakeView(vw: clockImageView)
+        ringAlarm()
     }
 
     private func  showWalkthrough() {
@@ -95,30 +159,27 @@ class TimerViewController: UIViewController {
         }
     }
 
-    private func askPermission(){
-        center.requestAuthorization(options: [.alert, .sound]) {granted, error in
-          if granted {
-            print("Temos permissão")
-          } else {
-            print("Permissão negada")
-          }
+    private func ringAlarm(){
+        let path = Bundle.main.path(forResource: "alarm-ring.mp3", ofType:nil)!
+        let url = URL(fileURLWithPath: path)
+
+        do {
+            alarmSound = try AVAudioPlayer(contentsOf: url)
+            alarmSound?.play()
+        } catch {
+            // couldn't load file :(
         }
     }
 
-    private func doNotification(){
-        let content = UNMutableNotificationContent()
-        content.title = "Olá!"
-        content.body = "Eu sou uma notificação local"
-        content.sound = UNNotificationSound.default
+    private func shakeView(vw: UIView) {
+        let animation = CAKeyframeAnimation()
+        animation.keyPath = "position.x"
+        animation.values = [0, 10, -10, 10, -5, 5, -5, 0 ]
+        animation.keyTimes = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
+        animation.duration = 0.4
+        animation.isAdditive = true
 
-        let trigger = UNTimeIntervalNotificationTrigger(
-          timeInterval: 3,
-          repeats: false)
-        let request = UNNotificationRequest(
-          identifier: "MyNotification",
-          content: content,
-          trigger: trigger)
-        center.add(request)
+        vw.layer.add(animation, forKey: "shake")
     }
 }
 
