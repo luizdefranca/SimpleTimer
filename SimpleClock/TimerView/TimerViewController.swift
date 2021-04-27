@@ -28,11 +28,10 @@ class TimerViewController: UIViewController {
     var isTimerRunning  = false
     var timer = Timer()
     var seconds = 0
-    var publisher : Timer.TimerPublisher?
     let notificationManager = NotificationManager.shared
-    var bgTask : UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
     var alarmSound: AVAudioPlayer?
-    let queue = DispatchQueue.global(qos: .background)
+
+    var resignedActiveTime  = Date()
 
     //MARK: - Lifecycle Methods
     override func viewDidLoad() {
@@ -40,7 +39,11 @@ class TimerViewController: UIViewController {
         timePickerView.delegate = self
         timePickerView.dataSource = self
 
+        //Set a notification for when the app goes resign active
         NotificationCenter.default.addObserver(self, selector: #selector(goesBackground), name: UIApplication.willResignActiveNotification, object: nil)
+
+        //Set a notification for when the app goes back
+        NotificationCenter.default.addObserver(self, selector: #selector(goesActive), name: UIApplication.willEnterForegroundNotification, object: nil)
     }
 
 
@@ -66,38 +69,36 @@ class TimerViewController: UIViewController {
 
 
     func test() {
-       let t = NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
+        let t = NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
     }
 
     //MARK: - Functions
     func sendNot(){
-//        let not = Notification(name: UIApplication.willResignActiveNotification)
-//        NotificationCenter.default.addObserver(self, selector: #selector(goesBackground), name: UIApplication.willResignActiveNotification, object: nil)
-//        createNotifications.sendNotification(isBreak: isBreak)
-//        addRoundAndChangeTime()
-//        UIApplication.shared.endBackgroundTask(bgTask)
+        //        let not = Notification(name: UIApplication.willResignActiveNotification)
+        //        NotificationCenter.default.addObserver(self, selector: #selector(goesBackground), name: UIApplication.willResignActiveNotification, object: nil)
+        //        createNotifications.sendNotification(isBreak: isBreak)
+        //        addRoundAndChangeTime()
+        //        UIApplication.shared.endBackgroundTask(bgTask)
 
     }
 
     @objc func goesBackground() {
-        print("Goes Background")
+        print("App goes resign")
+        resignedActiveTime = Date()
     }
 
-    func statePhone(){
-            let state = UIApplication.shared.applicationState
-            if state == .active {
-               print("I'm active")
-            }
-            else if state == .inactive {
-               print("I'm inactive")
-            }
-            else if state == .background {
-               print("I'm in background")
-               bgTask = UIApplication.shared.beginBackgroundTask(expirationHandler: { UIApplication.shared.endBackgroundTask(self.bgTask) })
-            }
+    @objc func goesActive(){
+        let elapsedTime = Int(Date().timeIntervalSince(resignedActiveTime))
+        if elapsedTime >= (selectedTimeValue - seconds){
+            stopTimer()
+        } else {
+            seconds = elapsedTime
+        }
     }
-    
+
+
     func startTimer(){
+
         notificationManager.scheduleNotification(id: 1, timeInterval: Double(selectedTimeValue), title: "Alarm", body: "The time is over! :)")
 
         self.timePickerView.isHidden = true
@@ -107,13 +108,7 @@ class TimerViewController: UIViewController {
         isTimerRunning = !isTimerRunning
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(updateTimer)), userInfo: nil, repeats: true)
         timer.tolerance = 0
-
-
-        queue.async {
-            RunLoop.current.add(self.timer, forMode: .default)
-        }
-
-
+        RunLoop.current.add(self.timer, forMode: .default)
     }
 
     func stopTimer(){
@@ -129,10 +124,6 @@ class TimerViewController: UIViewController {
 
     @objc func updateTimer() {
 
-        
-        DispatchQueue.main.async {
-
-
         if self.seconds < self.selectedTimeValue {
             self.seconds += 1
             print(self.seconds)
@@ -141,8 +132,6 @@ class TimerViewController: UIViewController {
             print("time is over")
             self.playAlarm()
             self.stopTimer()
-        }
-
         }
     }
 

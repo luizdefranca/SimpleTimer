@@ -74,13 +74,13 @@
 			path = TimerView;
 			sourceTree = "<group>";
 		};
-		250117402630C40500F858AD /* LifeCycle */ = {
+		250117402630C40500F858AD /* App and Scene Delegates */ = {
 			isa = PBXGroup;
 			children = (
 				25946E272627B39B00E54CEB /* AppDelegate.swift */,
 				25946E292627B39C00E54CEB /* SceneDelegate.swift */,
 			);
-			path = LifeCycle;
+			path = "App and Scene Delegates";
 			sourceTree = "<group>";
 		};
 		2533F4B126307985003D3FDD /* WalkthroughView */ = {
@@ -111,7 +111,7 @@
 		25946E262627B39B00E54CEB /* SimpleClock */ = {
 			isa = PBXGroup;
 			children = (
-				250117402630C40500F858AD /* LifeCycle */,
+				250117402630C40500F858AD /* App and Scene Delegates */,
 				2501173F2630C39600F858AD /* TimerView */,
 				2533F4B126307985003D3FDD /* WalkthroughView */,
 				25946E2D2627B39C00E54CEB /* Main.storyboard */,
