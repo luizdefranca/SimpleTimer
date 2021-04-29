@@ -34,16 +34,13 @@ class TimerViewController: UIViewController {
     var resignedActiveTime  = Date()
 
     //MARK: - Lifecycle Methods
+
     override func viewDidLoad() {
         super.viewDidLoad()
         timePickerView.delegate = self
         timePickerView.dataSource = self
 
-        //Set a notification for when the app goes resign active
-        NotificationCenter.default.addObserver(self, selector: #selector(goesBackground), name: UIApplication.willResignActiveNotification, object: nil)
-
-        //Set a notification for when the app goes back
-        NotificationCenter.default.addObserver(self, selector: #selector(goesActive), name: UIApplication.willEnterForegroundNotification, object: nil)
+        addNotifications()
     }
 
 
@@ -67,20 +64,7 @@ class TimerViewController: UIViewController {
         }
     }
 
-
-    func test() {
-        let t = NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
-    }
-
     //MARK: - Functions
-    func sendNot(){
-        //        let not = Notification(name: UIApplication.willResignActiveNotification)
-        //        NotificationCenter.default.addObserver(self, selector: #selector(goesBackground), name: UIApplication.willResignActiveNotification, object: nil)
-        //        createNotifications.sendNotification(isBreak: isBreak)
-        //        addRoundAndChangeTime()
-        //        UIApplication.shared.endBackgroundTask(bgTask)
-
-    }
 
     @objc func goesBackground() {
         print("App goes resign")
@@ -140,7 +124,7 @@ class TimerViewController: UIViewController {
         ringAlarm()
     }
 
-    private func  showWalkthrough() {
+    fileprivate func  showWalkthrough() {
         let storyBoard = UIStoryboard(name: Constants.storyboard.walkthroughScreen.rawValue, bundle: nil)
         if let  pageViewController = storyBoard.instantiateViewController(withIdentifier:  "WalkThroughPageViewController") as? WalkThroughPageViewController {
             pageViewController.modalPresentationStyle = .fullScreen
@@ -148,7 +132,7 @@ class TimerViewController: UIViewController {
         }
     }
 
-    private func ringAlarm(){
+    fileprivate func ringAlarm(){
         let path = Bundle.main.path(forResource: "alarm-ring.mp3", ofType:nil)!
         let url = URL(fileURLWithPath: path)
 
@@ -160,7 +144,15 @@ class TimerViewController: UIViewController {
         }
     }
 
-    private func shakeView(vw: UIView) {
+    fileprivate func addNotifications() {
+        //Set a notification for when the app goes resign active
+        NotificationCenter.default.addObserver(self, selector: #selector(goesBackground), name: UIApplication.willResignActiveNotification, object: nil)
+
+        //Set a notification for when the app goes back
+        NotificationCenter.default.addObserver(self, selector: #selector(goesActive), name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+
+    fileprivate func shakeView(vw: UIView) {
         let animation = CAKeyframeAnimation()
         animation.keyPath = "position.x"
         animation.values = [0, 10, -10, 10, -5, 5, -5, 0 ]
